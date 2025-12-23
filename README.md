@@ -3,8 +3,8 @@
 # Structural insights into AQP3 channel closure upon pH and redox changes reveal an autoregulatory molecular mechanism
 
 <p>
-  <img align="right" src="assets/aqp3_schematic.png" width="270" alt="OptiGoMartini Performance"/>
-  The proposed model of AQP3 gating: an equilibrium between the open state (blue), closed state (magenta), and a closed state with bound H2O2 (green) is governed by the changes in pH and the presence of H2O2.
+  <img align="right" src="assets/aqp3_fig5.png" width="300" alt="OptiGoMartini Performance"/>
+  (Right) The proposed model of AQP3 gating: an equilibrium between the open state (blue), closed state (magenta), and a closed state with bound H2O2 (green) is governed by the changes in pH and the presence of H2O2.
 </p>
 
 Some structure files and simulation run files related to the paper:
@@ -17,14 +17,15 @@ Some structure files and simulation run files related to the paper:
 
 ## Cryo-EM structures
 
-pH 8.0 (open): 9QSX.pdb
-pH 5.5 (closed): 9QSY.pdb
-pH 8.0 + H2O2 (closed): 9QSZ.pdb
+- pH 8.0 (open): `9QSX.pdb`
+- pH 5.5 (closed): `9QSY.pdb`
+- pH 8.0 + H2O2 (closed): `9QSZ.pdb`
 
 ## MD run files
 - cphmd: contains initial structures for open/closed, and .mdp required for pH 7 simulation (just change pH value if you want high/low)
 - unbiased: contains initial structures for open/closed, and .mdp. Protonation states were fixed to various protonation states, default GROMACS assignment structures are provided
-- neq: pKa free energy calculations were initialzed from unbiased trajectories of the various endstates. `pmx` software was used for `.top` file generation. See refs [1,2] for more discussion of these calculations
+- neq: pKa free energy calculations were initialzed from unbiased trajectories of the various endstates. `pmx` software was used for `.top` file generation. See Ref 1 for more discussion on these calculations.
+[1] J. Chem. Theory Comput. 2023, 19, 21, 7833–7845 https://doi.org/10.1021/acs.jctc.3c00721 
 
 ## Citation
 If you are using this data please cite the paper:
