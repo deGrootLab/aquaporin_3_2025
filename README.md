@@ -11,7 +11,7 @@ Some structure files and simulation run files related to the paper:
 ---
 
 <p>
-  <img align="right" src="assets/aqp3_fig5.png" width="270" alt="aqp3_schematic"/>
+  <img align="right" src="assets/aqp3_fig5.png" width="470" alt="aqp3_schematic"/>
 
   (Right) The proposed model of AQP3 gating: an equilibrium between the open state (blue), closed state (magenta), and a closed state with bound H2O2 (green) is governed by the changes in pH and the presence of H2O2.
 
