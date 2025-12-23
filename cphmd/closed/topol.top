@@ -1,0 +1,57 @@
+;
+;	File 'topol.top' was generated
+;	By user: cwilson (699930)
+;	On host: master1
+;	At date: Wed Jun 28 21:40:22 2023
+;
+;	This is a standalone topology file
+;
+;	Created by:
+;	           :-) GROMACS - gmx pdb2gmx, 2021-beta1-dev-UNCHECKED (-:
+;	
+;	Executable:   /usr/local/gromacs/git/constant-ph-2021-impi2017-fftw337-gcc93-cuda11.1/bin/gmx
+;	Data prefix:  /usr/local/gromacs/git/constant-ph-2021-impi2017-fftw337-gcc93-cuda11.1
+;	Working dir:  /home/cwilson/aquaporin_2023/lowcphmd2/test3
+;	Command line:
+;	  gmx pdb2gmx -f closed_cphmd2.pdb -ignh -ff charmm36-mar2019-cphmd -o new.pdb
+;	Force field was read from current directory or a relative path - path added.
+;
+
+; Include forcefield parameters
+#include "./charmm36-mar2019-cphmd.ff/forcefield.itp"
+
+; Include chain topologies
+#include "topol_Protein_chain_A.itp"
+#include "topol_Protein_chain_B.itp"
+#include "topol_Protein_chain_C.itp"
+#include "topol_Protein_chain_D.itp"
+
+; Include water topology
+#include "./charmm36-mar2019-cphmd.ff/tip3p.itp"
+
+#ifdef POSRES_WATER
+; Position restraint for each water oxygen
+[ position_restraints ]
+;  i funct       fcx        fcy        fcz
+   1    1       1000       1000       1000
+#endif
+
+; Include topology for ions
+#include "./charmm36-mar2019-cphmd.ff/ions.itp"
+#include "./charmm36-mar2019-cphmd.ff/popc.itp"
+
+[ system ]
+; Name
+Protein
+
+[ molecules ]
+; Compound        #mols
+POPC	          172
+Protein_chain_A     1
+Protein_chain_B     1
+Protein_chain_C     1
+Protein_chain_D     1
+SOL             17313
+BUF                68
+K		   56
+CL	   	   52

@@ -1,0 +1,579 @@
+
+; RUN CONTROL
+integrator           = md           
+dt                   = 0.002         ; Time step (ps).
+nsteps               = 500000000	     ; 100 ns.      
+
+; OUTPUT CONTROL
+nstxout-compressed   = 5000         ; Write frame every 10.000 ps.
+
+; NEIGHBOUR SEARCHING
+cutoff-scheme        = Verlet        ; Related params are inferred by Gromacs.
+
+; BOND PARAMETERS
+constraints          = h-bonds       ; Constrain H-bond vibrations.
+constraint_algorithm = lincs         ; Holonomic constraints.
+lincs_iter           = 1             ; Related to accuracy of LINCS.
+lincs_order          = 4             ; Related to accuracy of LINCS.
+
+; ELECTROSTATICS
+coulombtype          = PME           ; Use Particle Mesh Ewald.
+rcoulomb             = 1.2           ; Berk: CHARMM was calibrated for 1.2 nm.
+fourierspacing       = 0.14          ; Berk: set this to 0.14 for CHARMM.
+
+; VAN DER WAALS
+vdwtype              = cut-off       ; Twin range cut-off with nblist cut-off.
+rvdw                 = 1.2           ; Berk: CHARMM was calibrated for 1.2 nm.
+vdw-modifier         = force-switch  ; Berk: specific for CHARMM.
+rvdw-switch          = 1.0           ; Berk: specific for CHARMM.
+
+; TEMPERATURE COUPLING
+tcoupl               = v-rescale    
+tc-grps              = SYSTEM       
+tau-t                = 0.5           ; Berk: change from 0.1 to 0.5.
+ref-t                = 298           ; Reference temp. (K) (for each group).
+gen-vel		     = no
+
+; PRESSURE COUPLING
+pcoupl               = C-rescale
+pcoupltype           = semiisotropic     ; Uniform scaling of box.
+tau_p                = 5.0               ; Berk: better to change from 2.0 to 5.0.
+ref_p                = 1.0 1.0           ; Reference pressure (bar).
+compressibility      = 4.5e-05  4.5e-05  ; Isothermal compressbility of water.
+refcoord_scaling     = all               ; Required with position restraints.
+
+; PERIODIC BOUNDARY CONDITION
+pbc                  = xyz           ; To keep molecule(s) in box.
+
+; CONSTANT PH
+lambda-dynamics                                        = yes          
+lambda-dynamics-simulation-ph                          = 7.          
+lambda-dynamics-lambda-particle-mass                   = 5.0          
+lambda-dynamics-update-nst                             = 500          
+lambda-dynamics-tau                                    = 2.0          
+lambda-dynamics-number-lambda-group-types              = 4          
+lambda-dynamics-number-atom-collections                = 69
+lambda-dynamics-charge-constraints                     = yes
+lambda-dynamics-multistate-constraints	 	       = yes           
+
+
+lambda-dynamics-group-type1-name                       = ASP         
+lambda-dynamics-group-type1-n-states                   = 1            
+lambda-dynamics-group-type1-state-0-charges            = -0.21 0.75 -0.55 -0.61 0.44 
+lambda-dynamics-group-type1-state-1-charges            = -0.28 0.62 -0.76 -0.76 0.00 
+lambda-dynamics-group-type1-state-1-reference-pka      = 3.65         
+lambda-dynamics-group-type1-state-1-dvdl-coefficients  = -54.078 -144.280 278.550 -146.030 -554.270 44.621 
+
+lambda-dynamics-group-type2-name                       = GLU         
+lambda-dynamics-group-type2-n-states                   = 1            
+lambda-dynamics-group-type2-state-0-charges            = -0.21 0.75 -0.55 -0.61 0.44 
+lambda-dynamics-group-type2-state-1-charges            = -0.28 0.62 -0.76 -0.76 0.00 
+lambda-dynamics-group-type2-state-1-reference-pka      = 4.25         
+lambda-dynamics-group-type2-state-1-dvdl-coefficients  = 59.636 -429.770 514.370 -204.910 -558.210 27.157 
+
+lambda-dynamics-group-type3-name                       = HSP         
+lambda-dynamics-group-type3-n-states                   = 3            
+lambda-dynamics-group-type3-state-0-charges            = 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 
+lambda-dynamics-group-type3-state-1-charges            = -0.05 0.19 0.13 0.19 -0.51 0.44 -0.51 0.44 0.32 0.18 
+lambda-dynamics-group-type3-state-1-reference-pka      = 7.          
+lambda-dynamics-group-type3-state-1-dvdl-coefficients  = -3015.400 -13444.100 -34779.000 -44335.500 -31383.100 -13684.400 -4905.570 106.148 -484.107 11865.500 48985.400 104163.000 103612.000 59628.700 25794.900 3490.900 2180.340 -18552.600 -70083.600 -117174.000 -91492.500 -47959.200 -12542.400 -3968.740 14751.800 49997.800 63417.300 42048.300 16441.100 3929.980 -6193.440 -18113.500 -17591.700 -9832.740 -2246.330 934.809 2225.210 1887.540 594.263 402.485 604.077 158.757 -463.471 -193.458 82.630 
+lambda-dynamics-group-type3-state-2-charges            = -0.08 -0.05 0.09 0.22 -0.36 0.32 -0.70 0.00 0.25 0.13 
+lambda-dynamics-group-type3-state-2-reference-pka      = 6.53         
+lambda-dynamics-group-type3-state-2-dvdl-coefficients  = -1695.490 -8107.680 -22614.300 -40090.600 -39319.400 -21686.800 -5816.320 -1663.430 -1231.350 7080.800 30409.500 75205.700 105063.000 78113.900 30391.700 8898.150 5178.600 -12000.800 -45996.400 -95996.200 -101472.000 -54848.100 -18185.200 -8896.930 10595.200 35922.000 59318.700 45645.000 18480.300 8030.770 -5015.370 -14771.900 -17941.800 -9642.210 -3996.010 894.376 2282.280 1905.970 857.662 264.085 372.239 128.992 -135.244 -299.418 -28.509 
+lambda-dynamics-group-type3-state-3-charges            = -0.09 0.22 0.10 -0.05 -0.70 0.00 -0.36 0.32 0.25 0.13 
+lambda-dynamics-group-type3-state-3-reference-pka      = 6.92         
+lambda-dynamics-group-type3-state-3-dvdl-coefficients  = -111.044 -768.566 -9092.120 -17291.100 -2883.780 15464.200 13669.900 5673.640 433.027 873.492 5534.280 29537.700 27498.600 -17935.700 -31834.800 -17251.300 -1555.290 -2245.470 -11551.300 -31061.600 -4912.980 24459.900 19180.800 2258.940 2451.910 9281.430 10136.100 -7134.350 -9948.520 -1755.790 -986.264 -1997.060 1570.570 3175.520 958.098 -64.335 -650.924 -1045.660 -389.613 -6.332 63.244 4.259 286.277 228.063 -171.139 
+
+
+lambda-dynamics-group-type4-name                          = BUF
+lambda-dynamics-group-type4-n-states                      = 1
+lambda-dynamics-group-type4-state-0-charges               = -0.5
+lambda-dynamics-group-type4-state-1-charges               =  0.5
+lambda-dynamics-group-type4-state-1-reference-pka         = 7.  
+lambda-dynamics-group-type4-state-1-dvdl-coefficients     = 1000.00 -2917.80 2585.60 -288.86 -1274.70 577.2
+
+
+lambda-dynamics-atom-set1-name                         = HSP                   
+lambda-dynamics-atom-set1-index-group-name             = LAMBDA1 
+lambda-dynamics-atom-set1-barrier                      = 5.0     
+lambda-dynamics-atom-set1-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set1-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set2-name                         = GLU                   
+lambda-dynamics-atom-set2-index-group-name             = LAMBDA2 
+lambda-dynamics-atom-set2-barrier                      = 5.0     
+lambda-dynamics-atom-set2-initial-lambda               = 1.0
+lambda-dynamics-atom-set2-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set3-name                         = HSP                   
+lambda-dynamics-atom-set3-index-group-name             = LAMBDA3 
+lambda-dynamics-atom-set3-barrier                      = 5.0     
+lambda-dynamics-atom-set3-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set3-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set4-name                         = HSP                   
+lambda-dynamics-atom-set4-index-group-name             = LAMBDA4 
+lambda-dynamics-atom-set4-barrier                      = 5.0     
+lambda-dynamics-atom-set4-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set4-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set5-name                         = GLU                   
+lambda-dynamics-atom-set5-index-group-name             = LAMBDA5 
+lambda-dynamics-atom-set5-barrier                      = 5.0     
+lambda-dynamics-atom-set5-initial-lambda               = 1.0
+lambda-dynamics-atom-set5-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set6-name                         = ASP                   
+lambda-dynamics-atom-set6-index-group-name             = LAMBDA6 
+lambda-dynamics-atom-set6-barrier                      = 5.0     
+lambda-dynamics-atom-set6-initial-lambda               = 1.0
+lambda-dynamics-atom-set6-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set7-name                         = HSP                   
+lambda-dynamics-atom-set7-index-group-name             = LAMBDA7 
+lambda-dynamics-atom-set7-barrier                      = 5.0     
+lambda-dynamics-atom-set7-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set7-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set8-name                         = ASP                   
+lambda-dynamics-atom-set8-index-group-name             = LAMBDA8 
+lambda-dynamics-atom-set8-barrier                      = 5.0     
+lambda-dynamics-atom-set8-initial-lambda               = 1.0
+lambda-dynamics-atom-set8-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set9-name                         = HSP                   
+lambda-dynamics-atom-set9-index-group-name             = LAMBDA9 
+lambda-dynamics-atom-set9-barrier                      = 5.0     
+lambda-dynamics-atom-set9-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set9-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set10-name                         = ASP                   
+lambda-dynamics-atom-set10-index-group-name             = LAMBDA10 
+lambda-dynamics-atom-set10-barrier                      = 5.0     
+lambda-dynamics-atom-set10-initial-lambda               = 1.0
+lambda-dynamics-atom-set10-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set11-name                         = ASP                   
+lambda-dynamics-atom-set11-index-group-name             = LAMBDA11 
+lambda-dynamics-atom-set11-barrier                      = 5.0     
+lambda-dynamics-atom-set11-initial-lambda               = 1.0
+lambda-dynamics-atom-set11-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set12-name                         = ASP                   
+lambda-dynamics-atom-set12-index-group-name             = LAMBDA12 
+lambda-dynamics-atom-set12-barrier                      = 5.0     
+lambda-dynamics-atom-set12-initial-lambda               = 1.0
+lambda-dynamics-atom-set12-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set13-name                         = GLU                   
+lambda-dynamics-atom-set13-index-group-name             = LAMBDA13 
+lambda-dynamics-atom-set13-barrier                      = 5.0     
+lambda-dynamics-atom-set13-initial-lambda               = 1.0
+lambda-dynamics-atom-set13-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set14-name                         = ASP                   
+lambda-dynamics-atom-set14-index-group-name             = LAMBDA14 
+lambda-dynamics-atom-set14-barrier                      = 5.0     
+lambda-dynamics-atom-set14-initial-lambda               = 1.0
+lambda-dynamics-atom-set14-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set15-name                         = HSP                   
+lambda-dynamics-atom-set15-index-group-name             = LAMBDA15 
+lambda-dynamics-atom-set15-barrier                      = 5.0     
+lambda-dynamics-atom-set15-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set15-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set16-name                         = HSP                   
+lambda-dynamics-atom-set16-index-group-name             = LAMBDA16 
+lambda-dynamics-atom-set16-barrier                      = 5.0     
+lambda-dynamics-atom-set16-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set16-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set17-name                         = GLU                   
+lambda-dynamics-atom-set17-index-group-name             = LAMBDA17 
+lambda-dynamics-atom-set17-barrier                      = 5.0     
+lambda-dynamics-atom-set17-initial-lambda               = 1.0
+lambda-dynamics-atom-set17-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set18-name                         = HSP                   
+lambda-dynamics-atom-set18-index-group-name             = LAMBDA18 
+lambda-dynamics-atom-set18-barrier                      = 5.0     
+lambda-dynamics-atom-set18-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set18-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set19-name                         = GLU                   
+lambda-dynamics-atom-set19-index-group-name             = LAMBDA19 
+lambda-dynamics-atom-set19-barrier                      = 5.0     
+lambda-dynamics-atom-set19-initial-lambda               = 1.0
+lambda-dynamics-atom-set19-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set20-name                         = HSP                   
+lambda-dynamics-atom-set20-index-group-name             = LAMBDA20 
+lambda-dynamics-atom-set20-barrier                      = 5.0     
+lambda-dynamics-atom-set20-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set20-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set21-name                         = HSP                   
+lambda-dynamics-atom-set21-index-group-name             = LAMBDA21 
+lambda-dynamics-atom-set21-barrier                      = 5.0     
+lambda-dynamics-atom-set21-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set21-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set22-name                         = GLU                   
+lambda-dynamics-atom-set22-index-group-name             = LAMBDA22 
+lambda-dynamics-atom-set22-barrier                      = 5.0     
+lambda-dynamics-atom-set22-initial-lambda               = 1.0
+lambda-dynamics-atom-set22-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set23-name                         = ASP                   
+lambda-dynamics-atom-set23-index-group-name             = LAMBDA23 
+lambda-dynamics-atom-set23-barrier                      = 5.0     
+lambda-dynamics-atom-set23-initial-lambda               = 1.0
+lambda-dynamics-atom-set23-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set24-name                         = HSP                   
+lambda-dynamics-atom-set24-index-group-name             = LAMBDA24 
+lambda-dynamics-atom-set24-barrier                      = 5.0     
+lambda-dynamics-atom-set24-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set24-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set25-name                         = ASP                   
+lambda-dynamics-atom-set25-index-group-name             = LAMBDA25 
+lambda-dynamics-atom-set25-barrier                      = 5.0     
+lambda-dynamics-atom-set25-initial-lambda               = 1.0
+lambda-dynamics-atom-set25-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set26-name                         = HSP                   
+lambda-dynamics-atom-set26-index-group-name             = LAMBDA26 
+lambda-dynamics-atom-set26-barrier                      = 5.0     
+lambda-dynamics-atom-set26-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set26-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set27-name                         = ASP                   
+lambda-dynamics-atom-set27-index-group-name             = LAMBDA27 
+lambda-dynamics-atom-set27-barrier                      = 5.0     
+lambda-dynamics-atom-set27-initial-lambda               = 1.0
+lambda-dynamics-atom-set27-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set28-name                         = ASP                   
+lambda-dynamics-atom-set28-index-group-name             = LAMBDA28 
+lambda-dynamics-atom-set28-barrier                      = 5.0     
+lambda-dynamics-atom-set28-initial-lambda               = 1.0
+lambda-dynamics-atom-set28-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set29-name                         = ASP                   
+lambda-dynamics-atom-set29-index-group-name             = LAMBDA29 
+lambda-dynamics-atom-set29-barrier                      = 5.0     
+lambda-dynamics-atom-set29-initial-lambda               = 1.0
+lambda-dynamics-atom-set29-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set30-name                         = GLU                   
+lambda-dynamics-atom-set30-index-group-name             = LAMBDA30 
+lambda-dynamics-atom-set30-barrier                      = 5.0     
+lambda-dynamics-atom-set30-initial-lambda               = 1.0
+lambda-dynamics-atom-set30-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set31-name                         = ASP                   
+lambda-dynamics-atom-set31-index-group-name             = LAMBDA31 
+lambda-dynamics-atom-set31-barrier                      = 5.0     
+lambda-dynamics-atom-set31-initial-lambda               = 1.0
+lambda-dynamics-atom-set31-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set32-name                         = HSP                   
+lambda-dynamics-atom-set32-index-group-name             = LAMBDA32 
+lambda-dynamics-atom-set32-barrier                      = 5.0     
+lambda-dynamics-atom-set32-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set32-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set33-name                         = HSP                   
+lambda-dynamics-atom-set33-index-group-name             = LAMBDA33 
+lambda-dynamics-atom-set33-barrier                      = 5.0     
+lambda-dynamics-atom-set33-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set33-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set34-name                         = GLU                   
+lambda-dynamics-atom-set34-index-group-name             = LAMBDA34 
+lambda-dynamics-atom-set34-barrier                      = 5.0     
+lambda-dynamics-atom-set34-initial-lambda               = 1.0
+lambda-dynamics-atom-set34-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set35-name                         = HSP                   
+lambda-dynamics-atom-set35-index-group-name             = LAMBDA35 
+lambda-dynamics-atom-set35-barrier                      = 5.0     
+lambda-dynamics-atom-set35-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set35-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set36-name                         = GLU                   
+lambda-dynamics-atom-set36-index-group-name             = LAMBDA36 
+lambda-dynamics-atom-set36-barrier                      = 5.0     
+lambda-dynamics-atom-set36-initial-lambda               = 1.0
+lambda-dynamics-atom-set36-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set37-name                         = HSP                   
+lambda-dynamics-atom-set37-index-group-name             = LAMBDA37 
+lambda-dynamics-atom-set37-barrier                      = 5.0     
+lambda-dynamics-atom-set37-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set37-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set38-name                         = HSP                   
+lambda-dynamics-atom-set38-index-group-name             = LAMBDA38 
+lambda-dynamics-atom-set38-barrier                      = 5.0     
+lambda-dynamics-atom-set38-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set38-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set39-name                         = GLU                   
+lambda-dynamics-atom-set39-index-group-name             = LAMBDA39 
+lambda-dynamics-atom-set39-barrier                      = 5.0     
+lambda-dynamics-atom-set39-initial-lambda               = 1.0
+lambda-dynamics-atom-set39-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set40-name                         = ASP                   
+lambda-dynamics-atom-set40-index-group-name             = LAMBDA40 
+lambda-dynamics-atom-set40-barrier                      = 5.0     
+lambda-dynamics-atom-set40-initial-lambda               = 1.0
+lambda-dynamics-atom-set40-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set41-name                         = HSP                   
+lambda-dynamics-atom-set41-index-group-name             = LAMBDA41 
+lambda-dynamics-atom-set41-barrier                      = 5.0     
+lambda-dynamics-atom-set41-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set41-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set42-name                         = ASP                   
+lambda-dynamics-atom-set42-index-group-name             = LAMBDA42 
+lambda-dynamics-atom-set42-barrier                      = 5.0     
+lambda-dynamics-atom-set42-initial-lambda               = 1.0
+lambda-dynamics-atom-set42-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set43-name                         = HSP                   
+lambda-dynamics-atom-set43-index-group-name             = LAMBDA43 
+lambda-dynamics-atom-set43-barrier                      = 5.0     
+lambda-dynamics-atom-set43-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set43-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set44-name                         = ASP                   
+lambda-dynamics-atom-set44-index-group-name             = LAMBDA44 
+lambda-dynamics-atom-set44-barrier                      = 5.0     
+lambda-dynamics-atom-set44-initial-lambda               = 1.0
+lambda-dynamics-atom-set44-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set45-name                         = ASP                   
+lambda-dynamics-atom-set45-index-group-name             = LAMBDA45 
+lambda-dynamics-atom-set45-barrier                      = 5.0     
+lambda-dynamics-atom-set45-initial-lambda               = 1.0
+lambda-dynamics-atom-set45-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set46-name                         = ASP                   
+lambda-dynamics-atom-set46-index-group-name             = LAMBDA46 
+lambda-dynamics-atom-set46-barrier                      = 5.0     
+lambda-dynamics-atom-set46-initial-lambda               = 1.0
+lambda-dynamics-atom-set46-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set47-name                         = GLU                   
+lambda-dynamics-atom-set47-index-group-name             = LAMBDA47 
+lambda-dynamics-atom-set47-barrier                      = 5.0     
+lambda-dynamics-atom-set47-initial-lambda               = 1.0
+lambda-dynamics-atom-set47-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set48-name                         = ASP                   
+lambda-dynamics-atom-set48-index-group-name             = LAMBDA48 
+lambda-dynamics-atom-set48-barrier                      = 5.0     
+lambda-dynamics-atom-set48-initial-lambda               = 1.0
+lambda-dynamics-atom-set48-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set49-name                         = HSP                   
+lambda-dynamics-atom-set49-index-group-name             = LAMBDA49 
+lambda-dynamics-atom-set49-barrier                      = 5.0     
+lambda-dynamics-atom-set49-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set49-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set50-name                         = HSP                   
+lambda-dynamics-atom-set50-index-group-name             = LAMBDA50 
+lambda-dynamics-atom-set50-barrier                      = 5.0     
+lambda-dynamics-atom-set50-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set50-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set51-name                         = GLU                   
+lambda-dynamics-atom-set51-index-group-name             = LAMBDA51 
+lambda-dynamics-atom-set51-barrier                      = 5.0     
+lambda-dynamics-atom-set51-initial-lambda               = 1.0
+lambda-dynamics-atom-set51-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set52-name                         = HSP                   
+lambda-dynamics-atom-set52-index-group-name             = LAMBDA52 
+lambda-dynamics-atom-set52-barrier                      = 5.0     
+lambda-dynamics-atom-set52-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set52-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set53-name                         = GLU                   
+lambda-dynamics-atom-set53-index-group-name             = LAMBDA53 
+lambda-dynamics-atom-set53-barrier                      = 5.0     
+lambda-dynamics-atom-set53-initial-lambda               = 1.0
+lambda-dynamics-atom-set53-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set54-name                         = HSP                   
+lambda-dynamics-atom-set54-index-group-name             = LAMBDA54 
+lambda-dynamics-atom-set54-barrier                      = 5.0     
+lambda-dynamics-atom-set54-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set54-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set55-name                         = HSP                   
+lambda-dynamics-atom-set55-index-group-name             = LAMBDA55 
+lambda-dynamics-atom-set55-barrier                      = 5.0     
+lambda-dynamics-atom-set55-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set55-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set56-name                         = GLU                   
+lambda-dynamics-atom-set56-index-group-name             = LAMBDA56 
+lambda-dynamics-atom-set56-barrier                      = 5.0     
+lambda-dynamics-atom-set56-initial-lambda               = 1.0
+lambda-dynamics-atom-set56-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set57-name                         = ASP                   
+lambda-dynamics-atom-set57-index-group-name             = LAMBDA57 
+lambda-dynamics-atom-set57-barrier                      = 5.0     
+lambda-dynamics-atom-set57-initial-lambda               = 1.0
+lambda-dynamics-atom-set57-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set58-name                         = HSP                   
+lambda-dynamics-atom-set58-index-group-name             = LAMBDA58 
+lambda-dynamics-atom-set58-barrier                      = 5.0     
+lambda-dynamics-atom-set58-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set58-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set59-name                         = ASP                   
+lambda-dynamics-atom-set59-index-group-name             = LAMBDA59 
+lambda-dynamics-atom-set59-barrier                      = 5.0     
+lambda-dynamics-atom-set59-initial-lambda               = 1.0
+lambda-dynamics-atom-set59-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set60-name                         = HSP                   
+lambda-dynamics-atom-set60-index-group-name             = LAMBDA60 
+lambda-dynamics-atom-set60-barrier                      = 5.0     
+lambda-dynamics-atom-set60-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set60-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set61-name                         = ASP                   
+lambda-dynamics-atom-set61-index-group-name             = LAMBDA61 
+lambda-dynamics-atom-set61-barrier                      = 5.0     
+lambda-dynamics-atom-set61-initial-lambda               = 1.0
+lambda-dynamics-atom-set61-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set62-name                         = ASP                   
+lambda-dynamics-atom-set62-index-group-name             = LAMBDA62 
+lambda-dynamics-atom-set62-barrier                      = 5.0     
+lambda-dynamics-atom-set62-initial-lambda               = 1.0
+lambda-dynamics-atom-set62-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set63-name                         = ASP                   
+lambda-dynamics-atom-set63-index-group-name             = LAMBDA63 
+lambda-dynamics-atom-set63-barrier                      = 5.0     
+lambda-dynamics-atom-set63-initial-lambda               = 1.0
+lambda-dynamics-atom-set63-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set64-name                         = GLU                   
+lambda-dynamics-atom-set64-index-group-name             = LAMBDA64 
+lambda-dynamics-atom-set64-barrier                      = 5.0     
+lambda-dynamics-atom-set64-initial-lambda               = 1.0
+lambda-dynamics-atom-set64-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set65-name                         = ASP                   
+lambda-dynamics-atom-set65-index-group-name             = LAMBDA65 
+lambda-dynamics-atom-set65-barrier                      = 5.0     
+lambda-dynamics-atom-set65-initial-lambda               = 1.0
+lambda-dynamics-atom-set65-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set66-name                         = HSP                   
+lambda-dynamics-atom-set66-index-group-name             = LAMBDA66 
+lambda-dynamics-atom-set66-barrier                      = 5.0     
+lambda-dynamics-atom-set66-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set66-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set67-name                         = HSP                   
+lambda-dynamics-atom-set67-index-group-name             = LAMBDA67 
+lambda-dynamics-atom-set67-barrier                      = 5.0     
+lambda-dynamics-atom-set67-initial-lambda               = 0.0 1.0 0.0  
+lambda-dynamics-atom-set67-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set68-name                         = GLU                   
+lambda-dynamics-atom-set68-index-group-name             = LAMBDA68 
+lambda-dynamics-atom-set68-barrier                      = 5.0     
+lambda-dynamics-atom-set68-initial-lambda               = 1.0
+lambda-dynamics-atom-set68-charge-restraint-group-index = 1 
+
+
+lambda-dynamics-atom-set69-name                         = BUF
+lambda-dynamics-atom-set69-index-group-name             = BUF
+lambda-dynamics-atom-set69-barrier                      = 5.0
+lambda-dynamics-atom-set69-initial-lambda               = 0.5
+lambda-dynamics-atom-set69-charge-restraint-group-index = 1
+lambda-dynamics-atom-set69-buffer-residue               = yes
+lambda-dynamics-atom-set69-buffer-residue-multiplier    = 68
+
