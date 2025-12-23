@@ -17,9 +17,6 @@ Some structure files and simulation run files related to the paper:
 
 </p>
 
-
----
-
 ## Cryo-EM structures
 
 - pH 8.0 (open): `9QSX.pdb`
